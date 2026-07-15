@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mechanistic Mapping: Income Statement Padding via Indirect Labor Manipulation</title>
+    <style>
+        :root {
+            --bg-color: #0d1117;
+            --card-bg: #161b22;
+            --border-color: #30363d;
+            --text-color: #c9d1d9;
+            --text-muted: #8b949e;
+            --accent-green: #238636;
+            --accent-red: #da3633;
+            --accent-blue: #58a6ff;
+            --highlight: #21262d;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            padding: 20px;
+            margin: 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+
+        h1 { color: #ffffff; font-size: 1.8rem; margin-bottom: 5px; }
+        h2 { color: #ffffff; font-size: 1.4rem; margin-top: 30px; border-bottom: 1px solid var(--border-color); padding-bottom: 8px; }
+        h3 { color: var(--accent-blue); font-size: 1.1rem; margin-top: 20px; }
+
+        p, li { color: var(--text-color); font-size: 0.95rem; }
+        .muted { color: var(--text-muted); }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        @media (max-width: 900px) {
+            .grid { grid-template-columns: 1fr; }
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 20px;
+        }
+
+        .card.neutral { border-left: 4px solid var(--text-muted); }
+        .card.manipulated { border-left: 4px solid var(--accent-red); }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            font-size: 0.9rem;
+        }
+
+        th, td {
+            padding: 8px 12px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            background-color: var(--highlight);
+            color: #ffffff;
+            font-weight: 600;
+        }
+
+        .num { text-align: right; font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace; }
+        .bold { font-weight: bold; color: #ffffff; }
+        .negative { color: var(--accent-red); }
+        .positive { color: var(--accent-green); }
+
+        .formula-box {
+            background-color: var(--highlight);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 15px;
+            font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+            font-size: 0.9rem;
+            margin: 15px 0;
+            overflow-x: auto;
+        }
+
+        .journal-entry {
+            font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+            font-size: 0.85rem;
+            background: #1f242c;
+            padding: 12px;
+            border-left: 3px solid var(--accent-blue);
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+
+        .indent { padding-left: 30px; }
+
+        .badge {
+            display: inline-block;
+            padding: 2px 8px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            border-radius: 2rem;
+            text-transform: uppercase;
+        }
+        .badge.neutral { background-color: rgba(139, 148, 158, 0.2); color: var(--text-muted); }
+        .badge.alert { background-color: rgba(218, 54, 51, 0.2); color: #ff7b72; }
+
+        .interactive-section {
+            background: linear-gradient(180deg, var(--card-bg) 0%, var(--bg-color) 100%);
+            border: 1px dashed var(--accent-blue);
+            padding: 25px;
+            border-radius: 8px;
+            margin-top: 30px;
+        }
+
+        .slider-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: var(--highlight);
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            border: 1px solid var(--border-color);
+        }
+
+        input[type="range"] {
+            flex-grow: 1;
+            margin: 0 20px;
+            accent-color: var(--accent-blue);
+        }
+
+        .metric-banner {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        .metric-card {
+            background: var(--highlight);
+            padding: 15px;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+        }
+        .metric-val {
+            font-family: monospace;
+            font-size: 1.4rem;
+            font-weight: bold;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>Axiomatic Mechanics: Income Statement Padding via Indirect Labor Siphoning</h1>
+        <p class="muted">A professional framework evaluating how overproduction and tactical categorization shifts under GAAP Absorption Costing transfer operating expenses from the Income Statement directly into Inventory Assets.</p>
+    </header>
+
+    <h2>The Underlying Core Mechanics</h2>
+    <p>Under GAAP (ASC 330), manufacturing operations use <strong>Absorption Costing</strong>, meaning all manufacturing overhead (MOH)—both variable and fixed—must be capitalized into inventory unit costs rather than expensed immediately as a period cost. Management can exploit this accounting mechanism to temporarily artificially pad net operating income via two levers:</p>
+    <ul>
+        <li><strong>Classification Shifting:</strong> Re-classifying indirect labor (e.g., product engineers, quality assurance, floor supervisors) out of SG&A operating expenses (period costs) and into Manufacturing Overhead (product costs).</li>
+        <li><strong>Absorption Overproduction Loop:</strong> Boosting production volume far beyond market demand. This dilutes fixed costs over a higher denominator of units. Unsold units are held in Finished Goods inventory on the Balance Sheet, dragging their allocated share of fixed indirect salaries alongside them. Consequently, these expenses bypass Cost of Goods Sold (COGS) on the current Income Statement.</li>
+    </ul>
+
+    <div class="formula-box">
+        Unit Product Cost = Direct Materials + Direct Labor + (Total Manufacturing Overhead / Units Produced)<br>
+        Current Period COGS = Unit Product Cost × Units Sold<br>
+        Capitalized Ending Inventory Asset = Unit Product Cost × (Units Produced - Units Sold)
+    </div>
+
+    <h2>Baseline Scenario vs. Manipulated State-Space</h2>
+    <p class="muted">Operational Baseline parameters: Market Demand (Units Sold) = <strong>10,000 units</strong>. Base product manufacturing cost = <strong>$50/unit</strong>. Total support/indirect labor cost pool = <strong>$200,000</strong>.</p>
+
+    <div class="grid">
+        <!-- Baseline Scenario -->
+        <div class="card neutral">
+            <span class="badge neutral">Baseline Framework</span>
+            <h3>Conservative / Matching Principle</h3>
+            <p class="muted">Management matches production exactly to market demand (10,000 units). Support payroll is cleanly categorized under SG&A Operating Expenses.</p>
+            
+            <table>
+                <thead>
+                    <tr><th colspan="2">Operational Metrics</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>Units Produced</td><td class="num bold">10,000</td></tr>
+                    <tr><td>Units Sold</td><td class="num bold">10,000</td></tr>
+                    <tr><td>Calculated Unit Cost</td><td class="num">$50.00</td></tr>
+                </tbody>
+            </table>
+
+            <table>
+                <thead>
+                    <tr><th colspan="2">Condensed GAAP Income Statement</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>Revenue ($100 / unit)</td><td class="num bold">$1,000,000</td></tr>
+                    <tr><td>(-) Cost of Goods Sold (COGS)</td><td class="num negative">($500,000)</td></tr>
+                    <tr class="highlight"><td><strong>Gross Margin</strong></td><td class="num bold">$500,000</td></tr>
+                    <tr><td>(-) SG&A Operating Expense (Indirect Labor)</td><td class="num negative">($200,000)</td></tr>
+                    <tr class="highlight"><td><strong>Net Operating Income</strong></td><td class="num bold positive">$300,000</td></tr>
+                </tbody>
+            </table>
+
+            <h4>Balance Sheet Ending State</h4>
+            <div class="journal-entry">
+                Ending Inventory Value: <span class="bold">$0</span> (0 units in stock)<br>
+                MOH Deferral Impact: <span class="bold">$0</span> directly expensed.
+            </div>
+        </div>
+
+        <!-- Manipulated Scenario -->
+        <div class="card manipulated">
+            <span class="badge alert">Manipulated Loop</span>
+            <h3>Overproduction + Cost Classification Shift</h3>
+            <p class="muted">Management ramps production up to 20,000 units, creating an excess inventory padding buffer, and shifts the $200,000 support payroll into Manufacturing Overhead.</p>
+            
+            <table>
+                <thead>
+                    <tr><th colspan="2">Operational Metrics</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>Units Produced</td><td class="num bold">20,000</td></tr>
+                    <tr><td>Units Sold</td><td class="num bold">10,000</td></tr>
+                    <tr><td>Calculated Unit Cost ($50 + ($200k / 20k))</td><td class="num bold var-unit-cost">$60.00</td></tr>
+                </tbody>
+            </table>
+
+            <table>
+                <thead>
+                    <tr><th colspan="2">Condensed GAAP Income Statement</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>Revenue ($100 / unit)</td><td class="num bold">$1,000,000</td></tr>
+                    <tr><td>(-) Cost of Goods Sold (COGS: 10k units × $60)</td><td class="num negative">($600,000)</td></tr>
+                    <tr class="highlight"><td><strong>Gross Margin</strong></td><td class="num bold">$400,000</td></tr>
+                    <tr><td>(-) SG&A Operating Expense (Indirect Labor Shifted)</td><td class="num positive">$0</td></tr>
+                    <tr class="highlight"><td><strong>Net Operating Income</strong></td><td class="num bold positive" style="color:#3fb950;">$400,000</td></tr>
+                </tbody>
+            </table>
+
+            <h4>Balance Sheet Ending State</h4>
+            <div class="journal-entry">
+                Ending Inventory Value: <span class="bold">$600,000</span> (10,000 units in stock)<br>
+                MOH Deferral Asset Capture: <span class="bold" style="color:#58a6ff;">$100,000</span> of indirect labor trapped in asset valuation.
+            </div>
+        </div>
+    </div>
+
+    <h2>Double-Entry Tracking (The Audit Trail)</h2>
+    <p>To audit this manipulation, an Operational Research Analyst tracking internal data controls must reconstruct the underlying adjustments passing through the general ledger:</p>
+    
+    <h3>1. Capitalizing Shifted Salaries to Manufacturing Overhead</h3>
+    <div class="journal-entry">
+        <strong>Dr.</strong> Manufacturing Overhead Control (Product Cost Bucket) ............ $200,000<br>
+        <span class="indent"><strong>Cr.</strong> Salaries/Wages Payable ................................................................ $200,000</span><br>
+        <span class="muted">Note: Bypasses immediate SG&A execution on the current Income Statement.</span>
+    </div>
+
+    <h3>2. Moving Cost Pool into Work-in-Process (WIP) and Finished Goods</h3>
+    <div class="journal-entry">
+        <strong>Dr.</strong> Finished Goods Inventory Asset (20,000 units × $60) .................. $1,200,000<br>
+        <span class="indent"><strong>Cr.</strong> Raw Materials / Direct Labor Allocation .......................................... $1,000,000</span><br>
+        <span class="indent"><strong>Cr.</strong> Manufacturing Overhead Control (Applied) ........................................ $200,000</span>
+    </div>
+
+    <h3>3. Recognizing Period Cost of Sales</h3>
+    <div class="journal-entry">
+        <strong>Dr.</strong> Cost of Goods Sold (COGS) (10,000 sold × $60) .......................... $600,000<br>
+        <span class="indent"><strong>Cr.</strong> Finished Goods Inventory Asset ........................................................ $600,000</span><br>
+        <span class="muted">Result: $100,000 of overhead is left behind as an asset on the Balance Sheet.</span>
+    </div>
+
+    <!-- Interactive Simulator Sandbox -->
+    <div class="interactive-section">
+        <h2>Live System Stress-Testing Simulator</h2>
+        <p class="muted">Dynamically alter production volume and the allocation of indirect labor to analyze how absorption-costing distortion creates non-linear income padding anomalies in real time.</p>
+        
+        <div class="slider-container">
+            <label class="bold">Production Volume (Units Produced): <span id="prod-val" style="color:var(--accent-blue);">15,000</span></label>
+            <input type="range" id="prod-slider" min="10000" max="30000" step="1000" value="15000">
+        </div>
+
+        <div class="slider-container">
+            <label class="bold">Indirect Labor Reclassified to Overhead: <span id="labor-val" style="color:var(--accent-blue);">50%</span></label>
+            <input type="range" id="labor-slider" min="0" max="100" step="10" value="50">
+        </div>
+
+        <div class="metric-banner">
+            <div class="metric-card">
+                <div class="muted" style="font-size:0.8rem; font-weight:600;">UNIT PRODUCT COST</div>
+                <div class="metric-val" id="calc-unit-cost">$56.67</div>
+            </div>
+            <div class="metric-card">
+                <div class="muted" style="font-size:0.8rem; font-weight:600;">NET OPERING INCOME</div>
+                <div class="metric-val positive" id="calc-net-inc" style="color:#3fb950;">$333,333</div>
+            </div>
+            <div class="metric-card">
+                <div class="muted" style="font-size:0.8rem; font-weight:600;">INCOME STATEMENT PADDING VARIANCE</div>
+                <div class="metric-val" id="calc-padding" style="color:#58a6ff;">+$33,333</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const prodSlider = document.getElementById('prod-slider');
+    const laborSlider = document.getElementById('labor-slider');
+    const prodVal = document.getElementById('prod-val');
+    const laborVal = document.getElementById('labor-val');
+    
+    const calcUnitCost = document.getElementById('calc-unit-cost');
+    const calcNetInc = document.getElementById('calc-net-inc');
+    const calcPadding = document.getElementById('calc-padding');
+
+    function recomputeSystemStates() {
+        // Base system definitions
+        const unitsSold = 10000;
+        const revenuePerUnit = 100;
+        const baseUnitCost = 50;
+        const totalIndirectLaborPool = 200000;
+        const baselineNetIncome = 300000;
+
+        // Active control choices
+        const unitsProduced = parseInt(prodSlider.value);
+        const shiftPercentage = parseInt(laborSlider.value) / 100;
+
+        prodVal.textContent = unitsProduced.toLocaleString();
+        laborVal.textContent = (shiftPercentage * 100) + '%';
+
+        // Math engine mechanics
+        const shiftedOverheadAmount = totalIndirectLaborPool * shiftPercentage;
+        const unshiftedSGAExpense = totalIndirectLaborPool * (1 - shiftPercentage);
+        
+        // Unit cost absorb allocation loop
+        const addedMOHPerUnit = shiftedOverheadAmount / unitsProduced;
+        const finalUnitProductCost = baseUnitCost + addedMOHPerUnit;
+
+        // Income Statement execution
+        const totalRevenue = unitsSold * revenuePerUnit;
+        const costOfGoodsSold = unitsSold * finalUnitProductCost;
+        const grossMargin = totalRevenue - costOfGoodsSold;
+        const activeNetOperatingIncome = grossMargin - unshiftedSGAExpense;
+        const paddingDistortion = activeNetOperatingIncome - baselineNetIncome;
+
+        // Render calculated metric updates
+        calcUnitCost.textContent = '$' + finalUnitProductCost.toFixed(2);
+        calcNetInc.textContent = '$' + Math.round(activeNetOperatingIncome).toLocaleString();
+        calcPadding.textContent = (paddingDistortion >= 0 ? '+' : '') + '$' + Math.round(paddingDistortion).toLocaleString();
+    }
+
+    prodSlider.addEventListener('input', recomputeSystemStates);
+    laborSlider.addEventListener('input', recomputeSystemStates);
+    recomputeSystemStates();
+</script>
+
+</body>
+</html>
