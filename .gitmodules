@@ -1,0 +1,3 @@
+[submodule "tanimura"]
+	path = tanimura
+	url = https://github.com/cathytanimura/sql_book
