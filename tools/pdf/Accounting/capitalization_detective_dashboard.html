@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quality of Earnings: Capitalization Detective</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    colors: {
+                        brand: { 500: '#3b82f6', 600: '#2563eb' },
+                        alert: { 500: '#ef4444' },
+                        success: { 500: '#22c55e' },
+                        cash: { 500: '#8b5cf6' }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f3f4f6; color: #1f2937; }
+        .dark body { background-color: #111827; color: #f9fafb; }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(229, 231, 235, 0.5);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        .dark .glass-panel {
+            background: rgba(31, 41, 55, 0.95);
+            border: 1px solid rgba(55, 65, 81, 0.5);
+        }
+        
+        /* Custom Toggle Switch */
+        .toggle-checkbox:checked {
+            right: 0;
+            border-color: #68D391;
+        }
+        .toggle-checkbox:checked + .toggle-label {
+            background-color: #68D391;
+        }
+        .transition-all { transition: all 0.3s ease-in-out; }
+    </style>
+</head>
+<body class="min-h-screen p-4 md:p-8 transition-colors duration-200">
+
+    <div class="max-w-6xl mx-auto space-y-6">
+        <header class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+            <div>
+                <h1 class="text-2xl font-bold tracking-tight">Quality of Earnings (QoE) Analysis</h1>
+                <p class="text-gray-500 dark:text-gray-400 text-sm mt-1">Detecting R&D Capitalization Manipulation Pre-IPO</p>
+            </div>
+            <div class="flex items-center gap-3 bg-white dark:bg-gray-800 p-2 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
+                <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Scenario:</span>
+                <div class="relative inline-block w-64 align-middle select-none">
+                    <select id="scenarioSelector" class="w-full bg-gray-100 dark:bg-gray-700 border-none rounded-lg text-sm font-semibold py-2 px-3 focus:ring-2 focus:ring-brand-500 text-gray-800 dark:text-gray-100 cursor-pointer outline-none">
+                        <option value="healthy">✅ Genuine Product Launch</option>
+                        <option value="manipulated">🚨 Suspect Timing (Pre-IPO)</option>
+                    </select>
+                </div>
+                <button id="themeToggle" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                    <span class="material-icons" id="themeIcon">dark_mode</span>
+                </button>
+            </div>
+        </header>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <!-- Metric 1: The Paper Illusion -->
+            <div class="glass-panel rounded-2xl p-6 relative overflow-hidden group">
+                <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                    <span class="material-icons text-6xl text-brand-500">request_quote</span>
+                </div>
+                <h3 class="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Q4 Net Income (Paper)</h3>
+                <div class="mt-2 flex items-baseline gap-2">
+                    <span id="metricNetIncome" class="text-4xl font-bold text-gray-900 dark:text-white">$0M</span>
+                    <span id="metricNiTrend" class="text-sm font-medium"></span>
+                </div>
+                <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">What Wall Street sees on the headline.</p>
+            </div>
+
+            <!-- Metric 2: The Reality Check -->
+            <div class="glass-panel rounded-2xl p-6 relative overflow-hidden group">
+                <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                    <span class="material-icons text-6xl text-cash-500">account_balance_wallet</span>
+                </div>
+                <h3 class="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Q4 Free Cash Flow</h3>
+                <div class="mt-2 flex items-baseline gap-2">
+                    <span id="metricFCF" class="text-4xl font-bold text-gray-900 dark:text-white">$0M</span>
+                    <span id="metricFcfTrend" class="text-sm font-medium"></span>
+                </div>
+                <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">The actual cash leaving the bank account.</p>
+            </div>
+
+            <!-- Metric 3: The Red Flag Indicator -->
+            <div class="glass-panel rounded-2xl p-6 relative overflow-hidden group">
+                <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                    <span class="material-icons text-6xl text-alert-500">warning</span>
+                </div>
+                <h3 class="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Q4 Capitalization Rate</h3>
+                <div class="mt-2 flex items-baseline gap-2">
+                    <span id="metricCapRate" class="text-4xl font-bold text-gray-900 dark:text-white">0%</span>
+                </div>
+                <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">% of Engineer salaries moved to Balance Sheet.</p>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div class="lg:col-span-2 glass-panel rounded-2xl p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-lg font-bold">The Illusion Gap: Net Income vs Free Cash Flow</h2>
+                    <div class="flex items-center gap-2">
+                        <span class="w-3 h-3 rounded-full bg-brand-500"></span><span class="text-xs">Net Income</span>
+                        <span class="w-3 h-3 rounded-full bg-cash-500 ml-2"></span><span class="text-xs">Cash Flow</span>
+                    </div>
+                </div>
+                <div class="relative h-72 w-full">
+                    <canvas id="financialChart"></canvas>
+                </div>
+            </div>
+
+            <div class="glass-panel rounded-2xl p-6 flex flex-col">
+                <h2 class="text-lg font-bold mb-4 flex items-center gap-2">
+                    <span class="material-icons text-brand-500">psychology</span> Analyst Notes
+                </h2>
+                <div id="analystNotes" class="flex-grow space-y-4 text-sm text-gray-600 dark:text-gray-300">
+                    <!-- Dynamic content injected here -->
+                </div>
+                
+                <div id="ipoAlert" class="mt-4 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl hidden">
+                    <div class="flex items-start gap-3">
+                        <span class="material-icons text-alert-500 mt-0.5">campaign</span>
+                        <div>
+                            <h4 class="font-bold text-alert-500 text-sm">IPO / Earnings Alert</h4>
+                            <p class="text-xs mt-1 text-red-700 dark:text-red-400">Massive divergence between reported profit and cash flow exactly aligned with Q4 IPO. High risk of earnings manipulation.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- Data Definitions ---
+        // Base assuming total engineer salaries = $100M per quarter.
+        const scenarios = {
+            healthy: {
+                title: "Genuine Product Launch",
+                capRates: [10, 15, 20, 25], // Steady, reasonable increase as product matures
+                revenue: [50, 60, 75, 95],  // Revenue is actually growing, validating the capitalization
+                cashFlow: [-55, -45, -30, -10], // Real cash is improving due to revenue
+                notes: `
+                    <p><strong><span class="text-success-500">✓ Consistent Capitalization:</span></strong> The capitalization rate grows steadily from 10% to 25%, aligning with a normal development lifecycle.</p>
+                    <p><strong><span class="text-success-500">✓ Revenue Validation:</span></strong> As the asset is capitalized, revenue actually accelerates, proving the software has real commercial value.</p>
+                    <p><strong><span class="text-success-500">✓ Cash Flow Convergence:</span></strong> Net Income and Free Cash Flow are moving in the same direction. The company is fundamentally getting healthier.</p>
+                `
+            },
+            manipulated: {
+                title: "Suspect Timing (Pre-IPO)",
+                capRates: [10, 15, 65, 85], // Sudden massive spike in Q3/Q4 right before IPO
+                revenue: [50, 52, 54, 55],  // Revenue is stagnant
+                cashFlow: [-55, -53, -51, -50], // Cash bleed remains exactly the same
+                notes: `
+                    <p><strong><span class="text-alert-500">🚩 The Policy Shift:</span></strong> Notice the violent jump in capitalization from 15% to 85% in H2. The engineering work didn't change; the accounting policy did.</p>
+                    <p><strong><span class="text-alert-500">🚩 The 'Illusion Gap':</span></strong> Look at the chart. Net income magically turns positive and skyrockets, but the actual cash leaving the bank (FCF) hasn't improved at all.</p>
+                    <p><strong><span class="text-alert-500">🚩 Stagnant Revenue:</span></strong> They claim the software is 'feasible' and valuable, but revenue is flat. They are hiding expenses on the balance sheet to manufacture profitability for the IPO roadshow.</p>
+                `
+            }
+        };
+
+        const totalSalary = 100; // $100M constant cash outflow for salaries
+        let currentChart = null;
+
+        // --- Core Financial Engine ---
+        function calculateFinancials(scenario) {
+            const data = scenarios[scenario];
+            let netIncome = [];
+            
+            for (let i = 0; i < 4; i++) {
+                // How much salary is EXPENSED (hits the P&L immediately)
+                const expensedSalary = totalSalary * (1 - (data.capRates[i] / 100));
+                
+                // Net Income = Revenue - Expensed Salary
+                // (Simplifying by ignoring other expenses/taxes for clear demonstration)
+                netIncome.push(data.revenue[i] - expensedSalary);
+            }
+            
+            return {
+                labels: ['Q1', 'Q2', 'Q3', 'Q4 (IPO Target)'],
+                netIncome: netIncome,
+                cashFlow: data.cashFlow,
+                capRates: data.capRates,
+                revenue: data.revenue
+            };
+        }
+
+        // --- UI Updating Logic ---
+        function updateUI(scenarioKey) {
+            const data = scenarios[scenarioKey];
+            const financials = calculateFinancials(scenarioKey);
+            
+            // Update Metrics (Q4 values)
+            const q4Ni = financials.netIncome[3];
+            const q3Ni = financials.netIncome[2];
+            const q4Fcf = financials.cashFlow[3];
+            const q4Cap = financials.capRates[3];
+
+            document.getElementById('metricNetIncome').textContent = `$${q4Ni.toFixed(0)}M`;
+            document.getElementById('metricNetIncome').className = `text-4xl font-bold ${q4Ni >= 0 ? 'text-success-500' : 'text-alert-500'}`;
+            
+            document.getElementById('metricFCF').textContent = `$${q4Fcf.toFixed(0)}M`;
+            document.getElementById('metricFCF').className = `text-4xl font-bold ${q4Fcf >= 0 ? 'text-success-500' : 'text-alert-500'}`;
+            
+            document.getElementById('metricCapRate').textContent = `${q4Cap}%`;
+            document.getElementById('metricCapRate').className = `text-4xl font-bold ${q4Cap > 50 ? 'text-alert-500' : 'text-brand-500'}`;
+
+            // Update Analyst Notes & Alerts
+            document.getElementById('analystNotes').innerHTML = data.notes;
+            const ipoAlert = document.getElementById('ipoAlert');
+            if (scenarioKey === 'manipulated') {
+                ipoAlert.classList.remove('hidden');
+            } else {
+                ipoAlert.classList.add('hidden');
+            }
+
+            // --- Chart Rendering ---
+            const ctx = document.getElementById('financialChart').getContext('2d');
+            
+            if (currentChart) {
+                currentChart.destroy();
+            }
+
+            // Determine if dark mode is active for chart styling
+            const isDark = document.documentElement.classList.contains('dark');
+            const gridColor = isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)';
+            const textColor = isDark ? '#9ca3af' : '#4b5563';
+
+            currentChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: financials.labels,
+                    datasets: [
+                        {
+                            label: 'Reported Net Income (Paper)',
+                            data: financials.netIncome,
+                            backgroundColor: 'rgba(59, 130, 246, 0.8)', // brand-500
+                            borderRadius: 6,
+                            order: 2
+                        },
+                        {
+                            label: 'Free Cash Flow (Reality)',
+                            data: financials.cashFlow,
+                            backgroundColor: 'rgba(139, 92, 246, 0.8)', // cash-500
+                            borderRadius: 6,
+                            order: 3
+                        },
+                        {
+                            label: 'Capitalization Rate (%)',
+                            data: financials.capRates,
+                            type: 'line',
+                            borderColor: '#ef4444',
+                            borderWidth: 3,
+                            borderDash: [5, 5],
+                            pointBackgroundColor: '#ef4444',
+                            pointRadius: 5,
+                            yAxisID: 'y1',
+                            order: 1
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: {
+                        mode: 'index',
+                        intersect: false,
+                    },
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            backgroundColor: isDark ? 'rgba(31, 41, 55, 0.9)' : 'rgba(255, 255, 255, 0.9)',
+                            titleColor: isDark ? '#fff' : '#000',
+                            bodyColor: isDark ? '#e5e7eb' : '#374151',
+                            borderColor: isDark ? '#4b5563' : '#e5e7eb',
+                            borderWidth: 1,
+                            padding: 12,
+                            boxPadding: 6
+                        }
+                    },
+                    scales: {
+                        y: {
+                            type: 'linear',
+                            display: true,
+                            position: 'left',
+                            title: { display: true, text: 'Millions ($)', color: textColor },
+                            grid: { color: gridColor },
+                            ticks: { color: textColor }
+                        },
+                        y1: {
+                            type: 'linear',
+                            display: true,
+                            position: 'right',
+                            title: { display: true, text: 'Capitalization %', color: textColor },
+                            min: 0,
+                            max: 100,
+                            grid: { drawOnChartArea: false },
+                            ticks: { color: textColor, callback: function(value) { return value + '%' } }
+                        },
+                        x: {
+                            grid: { display: false },
+                            ticks: { color: textColor, font: { weight: 'bold' } }
+                        }
+                    }
+                }
+            });
+        }
+
+        // --- Event Listeners ---
+        document.getElementById('scenarioSelector').addEventListener('change', (e) => {
+            updateUI(e.target.value);
+        });
+
+        // Theme Toggle Logic
+        const themeToggleBtn = document.getElementById('themeToggle');
+        const themeIcon = document.getElementById('themeIcon');
+        
+        // Check system preference on load
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.add('dark');
+            themeIcon.textContent = 'light_mode';
+        }
+
+        themeToggleBtn.addEventListener('click', () => {
+            document.documentElement.classList.toggle('dark');
+            if (document.documentElement.classList.contains('dark')) {
+                themeIcon.textContent = 'light_mode';
+            } else {
+                themeIcon.textContent = 'dark_mode';
+            }
+            // Re-render chart to update colors
+            updateUI(document.getElementById('scenarioSelector').value);
+        });
+
+        // Initialize App
+        updateUI('healthy');
+
+    </script>
+</body>
+</html>
